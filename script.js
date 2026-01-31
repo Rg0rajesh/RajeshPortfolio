@@ -7,7 +7,73 @@ document.addEventListener('DOMContentLoaded', function() {
     setupCardAnimations();
     initializeContactForm();
     initializeCopyButtons();
+    initializeMobileMenu();
+    handleResponsive();
 });
+
+// ===== MOBILE MENU INITIALIZATION =====
+function initializeMobileMenu() {
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('navMenu');
+    
+    if (!hamburger || !navMenu) return;
+    
+    hamburger.addEventListener('click', function() {
+        hamburger.classList.toggle('active');
+        navMenu.classList.toggle('active');
+    });
+    
+    // Close menu when a link is clicked
+    const navLinks = navMenu.querySelectorAll('a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+        });
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const isClickInsideNav = navMenu.contains(event.target);
+        const isClickOnHamburger = hamburger.contains(event.target);
+        
+        if (!isClickInsideNav && !isClickOnHamburger && navMenu.classList.contains('active')) {
+            hamburger.classList.remove('active');
+            navMenu.classList.remove('active');
+        }
+    });
+}
+
+// ===== RESPONSIVE HANDLER =====
+function handleResponsive() {
+    const hamburger = document.getElementById('hamburger');
+    const navMenu = document.getElementById('navMenu');
+    
+    window.addEventListener('resize', function() {
+        // Close menu on larger screens
+        if (window.innerWidth > 768) {
+            if (hamburger) hamburger.classList.remove('active');
+            if (navMenu) navMenu.classList.remove('active');
+        }
+    });
+    
+    // Adjust floating cards for mobile
+    adjustFloatingCards();
+}
+
+// ===== ADJUST FLOATING CARDS FOR MOBILE =====
+function adjustFloatingCards() {
+    if (window.innerWidth <= 1024) {
+        const floatingCards = document.querySelectorAll('.floating-card');
+        floatingCards.forEach(card => {
+            card.style.position = 'relative';
+            card.style.top = 'auto';
+            card.style.left = 'auto';
+            card.style.right = 'auto';
+            card.style.bottom = 'auto';
+        });
+    }
+}
 
 // ===== INITIALIZE ANIMATIONS =====
 function initializeAnimations() {
